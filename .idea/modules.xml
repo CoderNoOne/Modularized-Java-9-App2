@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/convertersapp/convertersapp.iml" filepath="$PROJECT_DIR$/convertersapp/convertersapp.iml" />
+      <module fileurl="file://$PROJECT_DIR$/exceptionsapp/exceptionsapp.iml" filepath="$PROJECT_DIR$/exceptionsapp/exceptionsapp.iml" />
+      <module fileurl="file://$PROJECT_DIR$/mainapp/mainapp.iml" filepath="$PROJECT_DIR$/mainapp/mainapp.iml" />
+      <module fileurl="file://$PROJECT_DIR$/modelapp/modelapp.iml" filepath="$PROJECT_DIR$/modelapp/modelapp.iml" />
+      <module fileurl="file://$PROJECT_DIR$/serviceapp/serviceapp.iml" filepath="$PROJECT_DIR$/serviceapp/serviceapp.iml" />
+      <module fileurl="file://$PROJECT_DIR$/validatorsapp/validatorsapp.iml" filepath="$PROJECT_DIR$/validatorsapp/validatorsapp.iml" />
+    </modules>
+  </component>
+</project>
