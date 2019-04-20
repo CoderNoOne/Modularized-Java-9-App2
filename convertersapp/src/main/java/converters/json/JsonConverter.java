@@ -15,12 +15,7 @@ public abstract class JsonConverter<T> {
 
   private final String jsonFilename;
 
-  private final Gson gson = new GsonBuilder()/*.registerTypeAdapter(LocalDate.class,
-          (JsonSerializer<LocalDate>) (localDate, type, context) ->
-                  new JsonPrimitive(localDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))))*/
-          .setPrettyPrinting().create();
-
-
+  private final Gson gson = new GsonBuilder().setPrettyPrinting().create();
   private final Type type = ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
 
   public JsonConverter(String jsonFilename) {
@@ -39,7 +34,6 @@ public abstract class JsonConverter<T> {
       throw new AppException("TO JSON CONVERSION EXCEPTION");
     }
   }
-
 
   public Optional<T> fromJson() {
     try (FileReader fileReader = new FileReader(jsonFilename)) {
