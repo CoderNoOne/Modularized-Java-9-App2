@@ -19,8 +19,6 @@ public class Customer {
   public Customer() {
   }
 
-
-
   public String getName() {
     return name;
   }
@@ -77,48 +75,5 @@ public class Customer {
             ", age=" + age +
             ", email='" + email + '\'' +
             '}';
-  }
-
-  public static final class CustomerBuilder {
-    private String name;
-    private String surname;
-    private int age;
-    private String email;
-
-    private CustomerBuilder() {
-    }
-
-    public static CustomerBuilder aCustomer() {
-      return new CustomerBuilder();
-    }
-
-    public CustomerBuilder name(String name) {
-      this.name = name;
-      return this;
-    }
-
-    public CustomerBuilder surname(String surname) {
-      this.surname = surname;
-      return this;
-    }
-
-    public CustomerBuilder age(int age) {
-      this.age = age;
-      return this;
-    }
-
-    public CustomerBuilder email(String email) {
-      this.email = email;
-      return this;
-    }
-
-    public Customer build() {
-      Customer customer = new Customer();
-      customer.setName(name);
-      customer.setSurname(surname);
-      customer.setAge(age);
-      customer.setEmail(email);
-      return customer;
-    }
   }
 }

@@ -1,9 +1,7 @@
 package model;
 
-
 import java.math.BigDecimal;
 import java.util.Objects;
-
 
 public class Product {
   private String name;
@@ -15,7 +13,6 @@ public class Product {
     this.category = category;
     this.price = price;
   }
-
 
   public Product() {
   }
@@ -66,41 +63,5 @@ public class Product {
             ", category=" + category +
             ", price=" + price +
             '}';
-  }
-
-  public static final class ProductBuilder {
-    private String name;
-    private Category category;
-    private BigDecimal price;
-
-    private ProductBuilder() {
-    }
-
-    public static ProductBuilder aProduct() {
-      return new ProductBuilder();
-    }
-
-    public ProductBuilder name(String name) {
-      this.name = name;
-      return this;
-    }
-
-    public ProductBuilder category(Category category) {
-      this.category = category;
-      return this;
-    }
-
-    public ProductBuilder price(BigDecimal price) {
-      this.price = price;
-      return this;
-    }
-
-    public Product build() {
-      Product product = new Product();
-      product.setName(name);
-      product.setCategory(category);
-      product.setPrice(price);
-      return product;
-    }
   }
 }

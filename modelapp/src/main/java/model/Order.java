@@ -27,7 +27,6 @@ public class Order {
     this.orderDate = orderBuilder.orderDate;
   }
 
-
   @Override
   public boolean equals(Object o) {
 
