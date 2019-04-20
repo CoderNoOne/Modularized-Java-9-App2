@@ -8,5 +8,4 @@ module convertersapp {
   exports converters.json.generator to mainapp;
   exports converters.others to serviceapp;
   opens converters.json.generator to mockneat;
-  /*opens converters.json to java.base;*/
 }

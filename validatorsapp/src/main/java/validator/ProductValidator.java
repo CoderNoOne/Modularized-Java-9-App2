@@ -6,7 +6,8 @@ import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ProductValidator {
+public class ProductValidator implements Validator<Product> {
+
   private Map<String, String> errors = new HashMap<>();
 
   public Map<String, String> validate(Product product) {
@@ -24,22 +25,19 @@ public class ProductValidator {
       errors.put("product name", "product name should contain only capital letters and whitespaces");
     }
 
-
     return errors;
+  }
+
+  public boolean hasErrors() {
+    return !errors.isEmpty();
   }
 
   private boolean isProductNameValid(Product product) {
     return product.getName().matches("[A-Z]+[\\s]*[A-Z]*");
   }
 
-
-  public boolean hasErrors() {
-    return !errors.isEmpty();
-  }
-
   private boolean isProductPriceValid(Product product) {
     return product.getPrice().compareTo(BigDecimal.ZERO) > 0;
   }
-
 
 }

@@ -1,7 +1,7 @@
 package converters.others;
 
 
-import converters.json.OrderJsonConverter;
+import converters.json.OrderDTOJsonConverter;
 import exceptions.AppException;
 import model.Order;
 
@@ -18,15 +18,13 @@ public class OrderServiceConverter {
 
   public List<Order> toOrderList(String jsonFile) {
 
-    /*if (jsonFile == null || !jsonFile.matches("[\\w]+\\.json"))
+   /* if (jsonFile == null || !jsonFile.matches("[\\w]+\\.json"))
       throw new AppException("THE FILE SHOULD HAVE FORMAT OF .json");*/
-
-    // walidator
 
     var orderValidator = new OrderValidator();
     AtomicInteger atomicInteger = new AtomicInteger(1);
 
-    return new OrderJsonConverter(jsonFile)
+    return new OrderDTOJsonConverter(jsonFile)
             .fromJson()
             .orElseThrow(() -> new AppException("FILE " + jsonFile + " is empty"))
             .stream()
@@ -40,12 +38,9 @@ public class OrderServiceConverter {
                 System.out.println("ORDER NO: " + atomicInteger.get());
                 System.out.println(orderErrors.entrySet().stream().map(e -> e.getKey() + " : " + e.getValue()).collect(Collectors.joining("\n")));
               }
-
               atomicInteger.incrementAndGet();
               return !orderValidator.hasErrors();
-            })
-            .collect(Collectors.toList());
-
-
+            }).collect(Collectors.toList());
   }
 }
+

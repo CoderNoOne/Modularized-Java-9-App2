@@ -1,32 +1,7 @@
 
-`squid:CallToDeprecatedMethodÈ"0Remove this use of "getMonth"; it is deprecated.(˜Ğ‰8ìŞò -
-nsquid:UselessImportCheck">Remove this unused import 'java.time.temporal.TemporalAmount'.(©¡”»üÿÿÿÿ8ç§á -
-V
-squid:S106S"9Replace this use of System.out or System.err by a logger.(×¼ñÓ8å„ÈİŸ-
-esquid:CallToDeprecatedMethodÒ"0Remove this use of "getMonth"; it is deprecated.(ÙÉÜŠıÿÿÿÿ8ó¾¹ -
-V
-squid:S106M"9Replace this use of System.out or System.err by a logger.(˜„ô8å„ÈİŸ-
-V
-squid:S106O"9Replace this use of System.out or System.err by a logger.(Ï¦ú8å„ÈİŸ-
-U
-squid:S1068"9Replace this use of System.out or System.err by a logger.(Ğ¯˜E8å„ÈİŸ-
-[
-squid:S106/"9Replace this use of System.out or System.err by a logger.(áÌÈÿÿÿÿÿ8å„ÈİŸ-
-esquid:CallToDeprecatedMethodÖ"0Remove this use of "getMonth"; it is deprecated.(ø¼ÿ™üÿÿÿÿ8î•² -
-^squid:UselessImportCheck".Remove this unused import 'java.time.Instant'.(Â‚éñÿÿÿÿÿ8ç§á -
-nsquid:CommentedOutCodeLine["<This block of commented-out lines of code should be removed.(Å‹˜õÿÿÿÿÿ8å„ÈİŸ-
-U
-squid:S106F"9Replace this use of System.out or System.err by a logger.(ÍŞ?8å„ÈİŸ-
-ƒsquid:S1488Æ"_Immediately return this expression instead of assigning it to the temporary variable "collect".(ü²Ô±øÿÿÿÿ8ìŞò -
-V
-squid:S1066"9Replace this use of System.out or System.err by a logger.(ª¼Æ¼8å„ÈİŸ-
-[
-squid:S1064"9Replace this use of System.out or System.err by a logger.(ø‘àÎıÿÿÿÿ8å„ÈİŸ-
-csquid:UnusedPrivateMethodE"2Remove this unused private "createProduct" method.(ÿúëîúÿÿÿÿ8å„ÈİŸ-
-[
-squid:S106K"9Replace this use of System.out or System.err by a logger.(Ÿ‘í¬şÿÿÿÿ8å„ÈİŸ-
-dsquid:UnusedPrivateMethod-"3Remove this unused private "createCustomer" method.(Â¿’ùÿÿÿÿ8å„ÈİŸ-
-V
-squid:S106>"9Replace this use of System.out or System.err by a logger.(×¼ñÓ8å„ÈİŸ-
-[
-squid:S106:"9Replace this use of System.out or System.err by a logger.(Ó¡Æüÿÿÿÿ8å„ÈİŸ-
+esquid:S1192h"GDefine a constant instead of duplicating this literal "  <tr>" 4 times.(şşæ8ÜğÕ†¢-
+nsquid:CommentedOutCodeLine"<This block of commented-out lines of code should be removed.(†ØÕ­ıÿÿÿÿ8§´î€¢-
+fsquid:S1192l"HDefine a constant instead of duplicating this literal "  </tr>" 4 times.(øÏ•‡8ÜğÕ†¢-
+ksquid:S1192g"HDefine a constant instead of duplicating this literal "<table>" 3 times.(²ø¦½úÿÿÿÿ8êÇ½‡¢-
+dsquid:S1192n"FDefine a constant instead of duplicating this literal "</td>" 4 times.(›µ×…8ÜğÕ†¢-
+gsquid:S1192n"IDefine a constant instead of duplicating this literal "    <td>" 6 times.(›µ×…8·ãÉ†¢-

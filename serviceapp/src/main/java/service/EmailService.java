@@ -12,7 +12,10 @@ public class EmailService {
   private static final String emailAddress = "the.mountain.057@gmail.com";
   private static final String emailPassword = "tatry321";
 
-  public void sendAsHtml(String recipient, String subject, String htmlContent) {
+  private EmailService() {
+  }
+
+  public static void sendAsHtml(String recipient, String subject, String htmlContent) {
 
     try {
       System.out.println("Sending email ...");
@@ -31,7 +34,7 @@ public class EmailService {
 
   }
 
-  private void prepareEmailMessage(MimeMessage mimeMessage, String recipient, String subject, String htmlContent) {
+  private static void prepareEmailMessage(MimeMessage mimeMessage, String recipient, String subject, String htmlContent) {
     try {
       mimeMessage.setContent(htmlContent, "text/html;charset=utf-8");
       mimeMessage.setFrom(new InternetAddress(emailAddress));
@@ -42,8 +45,7 @@ public class EmailService {
     }
   }
 
-  // USTAWIENIA -> BEZPIECZENSTWO -> WLACZ DOSTEP DLA MNIEJ BEZPIECZNYCH
-  private Session createSession() {
+  private static Session createSession() {
 
     Properties properties = new Properties();
     properties.put("mail.smtp.starttls.enable", "true");

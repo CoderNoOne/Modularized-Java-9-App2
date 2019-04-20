@@ -39,9 +39,8 @@ public class UserDataService {
       localDate = LocalDate.parse(date);
     } catch (DateTimeParseException e) {
       System.err.println(Arrays.toString(e.getStackTrace()));
-      throw new AppException("Date input was of bad format");
+      throw new AppException("DATE FORMAT NOT SUPPORTED");
     }
-
     return localDate;
   }
 }

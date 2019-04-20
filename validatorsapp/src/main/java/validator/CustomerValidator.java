@@ -1,12 +1,11 @@
 package validator;
 
 import model.Customer;
-import org.apache.commons.validator.routines.EmailValidator;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class CustomerValidator {
+public class CustomerValidator implements Validator<Customer> {
 
   private Map<String, String> errors = new HashMap<>();
 
@@ -38,7 +37,6 @@ public class CustomerValidator {
     return errors;
   }
 
-
   public boolean hasErrors() {
     return !errors.isEmpty();
   }
@@ -56,13 +54,6 @@ public class CustomerValidator {
   }
 
   private boolean isEmailValid(Customer customer) {
-    class MailValidator extends EmailValidator {
-
-      MailValidator(boolean allowLocal) {
-        super(allowLocal);
-      }
-    }
-
     return new MailValidator(false).isValid(customer.getEmail());
 
   }

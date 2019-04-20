@@ -1,6 +1,6 @@
 package converters.json.generator;
 
-import converters.json.OrderJsonConverter;
+import converters.json.OrderDTOJsonConverter;
 import model.Category;
 import model.Customer;
 import model.OrderDTO;
@@ -15,21 +15,20 @@ import java.util.stream.Collectors;
 
 public class DataGenerator {
 
-  private static MockNeat mockNeat = MockNeat.threadLocal();
-  private static Random rnd = new Random();
-  private static List<String> emails = emailsRepository();
-  private static List<String> firstNames = firstnamesRepository();
-  private static List<String> lastNames = lastnamesRepository();
-  private static List<String> dates = datesRepository();
+  private static final Random rnd = new Random();
+  private static final MockNeat mockNeat = MockNeat.threadLocal();
+  private static final List<String> emails = emailsRepository();
+  private static final List<String> firstNames = firstNamesRepository();
+  private static final List<String> lastNames = lastNamesRepository();
+  private static final List<String> dates = datesRepository();
 
 
   public static void generate(final String jsonFilename) {
-    new OrderJsonConverter(jsonFilename).toJson(generateOrders());
+    new OrderDTOJsonConverter(jsonFilename).toJson(generateOrders());
   }
 
   private DataGenerator() {
   }
-
 
   private static List<String> datesRepository() {
 
@@ -63,7 +62,7 @@ public class DataGenerator {
             .val();
   }
 
-  private static List<String> firstnamesRepository() {
+  private static List<String> firstNamesRepository() {
 
     return mockNeat.names().first()
             .stream()
@@ -73,7 +72,7 @@ public class DataGenerator {
             .collect(Collectors.toList());
   }
 
-  private static List<String> lastnamesRepository() {
+  private static List<String> lastNamesRepository() {
 
     return mockNeat.names().last()
             .stream()
@@ -102,14 +101,10 @@ public class DataGenerator {
 
   private static List<Product> productsRepository() {
     return Arrays.asList(
-            new Product(rnd.nextInt(3) % 2 == 0 ? "COMPUTER" : "computer", Category.ELECTRONICS, BigDecimal.valueOf(5_000)),
-            new Product(rnd.nextInt(20) > 13 ? "HEADPHONES" : "headphones", Category.ELECTRONICS, BigDecimal.valueOf(300)),
-            new Product("TV", Category.ELECTRONICS, BigDecimal.valueOf(10_000)),
-            new Product(rnd.nextInt(4) < 2 ? "VR" : "vr", Category.ELECTRONICS, BigDecimal.valueOf(1_000)),
-//            new Product("");
-            null
+            new Product(rnd.nextInt(3) % 2 == 0 ? "COMPUTER" : "computer", Category.ELECTRONICS, new BigDecimal("5000")),
+            new Product(rnd.nextInt(20) > 13 ? "HEADPHONES" : "headphones", Category.ELECTRONICS, new BigDecimal("300")),
+            new Product("TV", Category.ELECTRONICS, new BigDecimal("10000")),
+            new Product(rnd.nextInt(4) < 2 ? "VR" : "vr", Category.ELECTRONICS, new BigDecimal("1000"))
     );
   }
-
-
 }

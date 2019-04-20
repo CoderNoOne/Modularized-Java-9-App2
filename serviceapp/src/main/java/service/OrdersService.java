@@ -1,6 +1,5 @@
 package service;
 
-
 import converters.others.OrderServiceConverter;
 import exceptions.AppException;
 import model.*;
@@ -14,6 +13,8 @@ import java.time.Month;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static j2html.TagCreator.*;
+
 
 public class OrdersService {
 
@@ -25,97 +26,11 @@ public class OrdersService {
   }
 
   private List<Order> getOrdersFromJson(final String jsonFilename) {
-
-   /* if (jsonFilename == null || !jsonFilename.matches("[\\w]+\\.json")) {
-      throw new AppException("JSON FILE IS NOT CORRECT");
-    }*/
-
     return new OrderServiceConverter().toOrderList(jsonFilename);
   }
 
   public OrdersService() {
-
   }
-
-  private static Customer createCustomer() {
-
-    System.out.println("INPUT CUSTOMER INFO DETAIL");
-    Customer.CustomerBuilder builder = null;
-
-    try (Scanner sc = new Scanner(System.in)) {
-
-      System.out.println("INPUT CUSTOMER FIRST NAME");
-      builder = Customer.CustomerBuilder.aCustomer().name(sc.nextLine());
-      System.out.println("INPUT CUSTOMER LAST  NAME");
-      builder = builder.surname(sc.nextLine());
-      System.out.println("INPUT CUSTOMER AGE");
-      builder = builder.age(sc.nextInt());
-      System.out.println("INPUT CUSTOMER EMAIL");
-      builder = builder.email(sc.nextLine());
-
-    } catch (InputMismatchException e) {
-      System.err.println(Arrays.toString(e.getStackTrace()));
-      throw new AppException("YOU 'VE INPUTTED BAD DATA TYPE");
-    }
-
-    return builder.build();
-  }
-
-  private static Product createProduct() {
-    System.out.println("INPUT PRODUCT INFO DETAIL");
-    Product.ProductBuilder builder = null;
-
-    try (Scanner sc = new Scanner(System.in)) {
-
-      System.out.println("INPUT PRODCUT NAME");
-      builder = Product.ProductBuilder.aProduct().name(sc.nextLine());
-      System.out.println("INPUT PRODUCT CATEGORY");
-      builder = builder.name(sc.nextLine().toUpperCase());
-      System.out.println("INPUT PRODUCT PRICE");
-      builder = builder.price(sc.nextBigDecimal());
-
-    } catch (InputMismatchException e) {
-      System.err.println(Arrays.toString(e.getStackTrace()));
-      throw new AppException("YOU 'VE INPUTTED BAD DATA TYPE");
-    }
-
-    return builder.build();
-
-  }
-
-  /*private static OrderDTO createOrder() {
-
-    System.out.println("INPUT ORDER DETAIL");
-    Customer customer = createCustomer();
-    Product product = createProduct();
-
-    try (Scanner sc = new Scanner(System.in)) {
-      System.out.println("INPUT ORDER QUANTITY");
-      int quantity = sc.nextInt();
-      System.out.println("INPUT ORDER DATE");
-      String stringDate = sc.nextLine();
-      if (!isDateValid(stringDate)) {
-        throw new AppException("");
-      }
-
-    } catch () {
-
-    }
-  }
-
-  public static boolean isDateValid(String date) {
-
-    try {
-      DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-      df.setLenient(false);
-      df.parse(date)
-
-    } catch (ParseException e) {
-      System.err.println(Arrays.toString(e.getStackTrace()));
-      throw new AppException("");
-    }
-  }*/
-
 
   public BigDecimal averageProductsPriceBoughtWithinDateRange(LocalDate minDate, LocalDate maxDate) {
 
@@ -139,7 +54,6 @@ public class OrdersService {
                             .max(Comparator.comparing(Order::getQuantity)).get().getProduct()));
 
   }
-
 
   public Map<String, LocalDate> dateWithMostAndLeastPurchases() {
 
@@ -167,14 +81,51 @@ public class OrdersService {
 
   public Map<Customer, List<Product>> productsListForCustomers() {
 
-    return orders
+    Map<Customer, List<Product>> customerProductMap = orders
             .stream()
             .collect(Collectors.groupingBy(Order::getCustomer, Collectors.mapping(Order::getProduct, Collectors.toList())));
 
-    // dorobic wysłanie maila
+    customerProductMap.
+            forEach((customer, productList) ->
+                    EmailService.sendAsHtml("firelight.code@gmail.com", "Order info from app", clientInfo(customer)
+                            + productList.stream().map(OrdersService::productInfo).collect(Collectors.joining())));
 
+    return customerProductMap;
   }
 
+  private static String clientInfo(Customer key) {
+
+    return h3("Client info:").render() +
+            table().with(
+                    tr().with(
+                            th().withText("First Name"),
+                            th().withText("Last Name"),
+                            th().withText("Age")
+                    ),
+                    tr().with(
+                            td().withText(key.getName()),
+                            td().withText(key.getSurname()),
+                            td().withText(String.valueOf(key.getAge()))
+                    )
+            ).render() + hr().render();
+  }
+
+  private static String productInfo(Product product) {
+
+    return h3("Product info: ").render() +
+            table().with(
+                    tr().with(
+                            th().withText("Name"),
+                            th().withText("Category"),
+                            th().withText("Price")
+                    ),
+                    tr().with(
+                            td().withText(product.getName()),
+                            td().withText(product.getCategory().toString()),
+                            td().withText(product.getPrice().toString())
+                    )
+            ).render() + hr().render();
+  }
 
   public int numberOfCustomersWhoBoughtAtLeastXProductsEachTime(int x) {
 
@@ -187,17 +138,15 @@ public class OrdersService {
             .sum();
   }
 
-
   public Map<Month, Long> numberOfProductsOrderedByMonth() {
 
     return orders
             .stream()
             .collect(Collectors.groupingBy(order -> order.getOrderDate().getMonth(),
                     Collectors.mapping(Order::getProduct, Collectors.counting())));
-
   }
 
-  public Map<Month, Category> mostPopularProductCategoryByOrderMonth() {
+  public Map<Month, Map.Entry<Category, Long>> mostPopularProductCategoryByOrderMonth() {
 
     return orders
             .stream()
@@ -206,24 +155,29 @@ public class OrdersService {
             .collect(Collectors.toMap(
                     month -> month,
                     month -> orders.stream().filter(order -> order.getOrderDate().getMonth().equals(month)).collect(Collectors.groupingBy(order -> order.getProduct().getCategory(),
-                            Collectors.counting())).entrySet().stream().max(Map.Entry.comparingByValue()).get().getKey()));
+                            Collectors.counting())).entrySet().stream().max(Map.Entry.comparingByValue()).get()));
   }
 
-
-  public Category mostPopularProductCategory() {
+  public Map<Category, Integer> mostPopularProductCategory() {
 
     return orders.stream()
-            .collect(Collectors.groupingBy(
-                    e -> e.getProduct().getCategory(),
-                    Collectors.summingInt(Order::getQuantity)))
-            .entrySet().stream().max(Map.Entry.comparingByValue())
-            .orElseThrow(() -> new AppException("No category found"))
-            .getKey();
+            .collect(Collectors.collectingAndThen(Collectors.groupingBy(
+                    e -> e.getProduct().getCategory(), Collectors.summingInt(Order::getQuantity)),
+                    map -> {
+                      Integer max = map.entrySet().stream().max(Comparator.comparing(Map.Entry::getValue))
+                              .orElseThrow(() -> new AppException("No entry")).getValue();
 
+                      return map
+                              .entrySet()
+                              .stream()
+                              .filter(e -> e.getValue().equals(max))
+                              .collect(Collectors.toMap(
+                                      Map.Entry::getKey,
+                                      Map.Entry::getValue));
+                    }));
   }
 
   public BigDecimal totalPriceForALlPurchasesAfterDiscount() {
-
 
     return new ArrayList<>(orders)
             .stream()
@@ -235,7 +189,5 @@ public class OrdersService {
               }
             }).map(order -> order.getProduct().getPrice().multiply(BigDecimal.valueOf(order.getQuantity())))
             .reduce(BigDecimal.ZERO, BigDecimal::add);
-
   }
-
 }

@@ -1,5 +1,6 @@
 package main;
 
+import converters.json.generator.DataGenerator;
 import exceptions.AppException;
 import service.OrdersService;
 import service.UserDataService;
@@ -8,12 +9,16 @@ import java.text.MessageFormat;
 import java.time.LocalDate;
 import java.util.Arrays;
 
-public class MenuService {
+public class Menu {
   private final OrdersService ordersService;
   private final UserDataService userDataService = new UserDataService();
 
+  public Menu(final String jsonFilename) {
 
-  public MenuService(final String jsonFilename) {
+    if (jsonFilename == null || !jsonFilename.matches(".+\\.json$")) {
+      throw new AppException("WRONG JSON FILE FORMAT");
+    }
+    DataGenerator.generate(jsonFilename);
     ordersService = new OrdersService(jsonFilename);
   }
 
@@ -21,7 +26,6 @@ public class MenuService {
     menuOptions();
     while (true) {
       try {
-
         int option = userDataService.getInt("INPUT YOUR OPTION: ");
         switch (option) {
           case 1:
@@ -71,7 +75,6 @@ public class MenuService {
     }
   }
 
-
   private void option1() {
     LocalDate minDate = userDataService.getDate("Input min date");
     LocalDate maxDate = userDataService.getDate("Input max date");
@@ -89,7 +92,6 @@ public class MenuService {
             (category, product) -> System.out.println("Category: " + category +
                     " -> " + "Most expensive product: " + product));
   }
-
 
   private void option3() {
     ordersService.productsListForCustomers().forEach(
@@ -118,7 +120,6 @@ public class MenuService {
     System.out.println("NUMBER OF CUSTOMERS WHO BOUGHT EACH TIME AT LEAST X NUMBER OF PRODUCTS:  "
             + ordersService.numberOfCustomersWhoBoughtAtLeastXProductsEachTime(minDealAmount));
   }
-
 
   private void option8() {
     System.out.println("MOST POPULAR PRODUCT CATEGORY: " + ordersService.mostPopularProductCategory());
@@ -151,7 +152,6 @@ public class MenuService {
                     "Option no. 10 - {9}\n" +
                     "Option no. 11 - {10}\n" +
                     "Option no. 12 - {11}",
-
 
             "AVERAGE PRODUCTS PRICE BOUGHT WITHIN DATE RANGE",
             "MOST EXPENSIVE PRODUCT IN EACH PRODUCT CATEGORY",
