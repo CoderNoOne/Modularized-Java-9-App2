@@ -34,7 +34,7 @@ public class DataGenerator {
 
   public static final int NUM_DATES = 400;
   public static final int NUM_CUSTOMER = 100;
-  public static final int NUM_ORDERS = 200;
+  public static final int NUM_ORDERS = 500;
   public static final int NUM_FNAMES = 100;
   public static final int NUM_LNAMES = 100;
   public static final int NUM_EMAILS = 500;
@@ -59,9 +59,8 @@ public class DataGenerator {
                               Collectors.flatMapping(arr -> Arrays.stream(arr[1].split("[,]")),
                                       Collectors.toList()))));
     } catch (IOException e) {
-      throw new AppException("Problem with " +filename);
+      throw new AppException("Problem with " + filename);
     }
-
   }
 
   public static void generate(final String jsonFilename) {
