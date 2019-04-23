@@ -1,27 +1,67 @@
 package converters.json.generator;
 
 import converters.json.OrderDTOJsonConverter;
+import exceptions.AppException;
 import model.Category;
 import model.Customer;
 import model.OrderDTO;
 import model.Product;
-import net.andreinc.mockneat.MockNeat;
+import net.andreinc.mockneat.unit.seq.Seq;
 
+import java.io.FileReader;
+import java.io.IOException;
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static java.time.LocalDate.now;
+import static net.andreinc.mockneat.types.enums.StringFormatType.LOWER_CASE;
+import static net.andreinc.mockneat.types.enums.StringFormatType.UPPER_CASE;
+import static net.andreinc.mockneat.unit.objects.Filler.filler;
+import static net.andreinc.mockneat.unit.objects.From.from;
+import static net.andreinc.mockneat.unit.objects.Probabilities.probabilities;
+import static net.andreinc.mockneat.unit.time.LocalDates.localDates;
+import static net.andreinc.mockneat.unit.types.Bools.bools;
+import static net.andreinc.mockneat.unit.types.Ints.ints;
+import static net.andreinc.mockneat.unit.types.Longs.longs;
+import static net.andreinc.mockneat.unit.user.Emails.emails;
+import static net.andreinc.mockneat.unit.user.Names.names;
 
 
 public class DataGenerator {
 
-  private static final Random rnd = new Random();
-  private static final MockNeat mockNeat = MockNeat.threadLocal();
+  public static final int NUM_DATES = 400;
+  public static final int NUM_CUSTOMER = 100;
+  public static final int NUM_ORDERS = 200;
+  public static final int NUM_FNAMES = 100;
+  public static final int NUM_LNAMES = 100;
+  public static final int NUM_EMAILS = 500;
+  public static final int NUM_PRODUCTS = 5;
+
+  private static final Map<Category, List<String>> productNamesByCategory = new EnumMap<>(Category.class);
   private static final List<String> emails = emailsRepository();
   private static final List<String> firstNames = firstNamesRepository();
   private static final List<String> lastNames = lastNamesRepository();
   private static final List<String> dates = datesRepository();
 
+  static {
+
+    try {
+      productNamesByCategory.putAll(
+              Files.readAllLines(Paths.get(".\\convertersapp\\ProductsNameByCategory"))
+                      .stream()
+                      .map(line -> line.split("[=]"))
+                      .filter(arr -> Arrays.stream(Category.values()).map(Category::toString).anyMatch(arr[0]::equals))
+                      .collect(Collectors.groupingBy(arr -> Category.valueOf(arr[0]),
+                              Collectors.flatMapping(arr -> Arrays.stream(arr[1].split("[,]")),
+                                      Collectors.toList()))));
+    } catch (IOException e) {
+      throw new AppException("");
+    }
+
+  }
 
   public static void generate(final String jsonFilename) {
     new OrderDTOJsonConverter(jsonFilename).toJson(generateOrders());
@@ -32,79 +72,85 @@ public class DataGenerator {
 
   private static List<String> datesRepository() {
 
-    return mockNeat
-            .localDates()
-            .between(LocalDate.now().minusYears(1), LocalDate.now().plusYears(5))
-            .list(400).get()
-            .stream().map(LocalDate::toString).collect(Collectors.toList());
+    return localDates()
+            .between(now().minusYears(1), now().plusYears(5))
+            .mapToString()
+            .list(NUM_DATES)
+            .get();
   }
 
   private static Set<Customer> customerRepository() {
-    return mockNeat
-            .reflect(Customer.class)
-            .field("name", mockNeat.from(firstNames))
-            .field("surname", mockNeat.from(lastNames))
-            .field("age", mockNeat.ints().rangeClosed(0, 80))
-            .set(HashSet::new, 100)
-            .val().stream().peek(customer -> customer.setEmail(getUniqueEmail()))
-            .collect(Collectors.toSet());
+
+    return filler(Customer::new)
+            .setter(Customer::setName, from(firstNames))
+            .setter(Customer::setSurname, from(lastNames))
+            .setter(Customer::setAge, ints().rangeClosed(0, 80))
+            .setter(Customer::setEmail, Seq.fromIterable(emails))
+            .set(HashSet::new, NUM_CUSTOMER)
+            .get();
   }
 
   private static List<OrderDTO> generateOrders() {
 
-    return mockNeat
-            .filler(OrderDTO::new)
-            .setter(OrderDTO::setCustomer, mockNeat.from(new ArrayList<>(customerRepository())))
-            .setter(OrderDTO::setProduct, mockNeat.from(productsRepository()))
-            .setter(OrderDTO::setQuantity, mockNeat.ints().rangeClosed(0, 100))
-            .setter(OrderDTO::setOrderDate, mockNeat.from(dates))
-            .list(ArrayList::new, 1000)
+    return filler(OrderDTO::new)
+            .setter(OrderDTO::setCustomer, from(new ArrayList<>(customerRepository())))
+            .setter(OrderDTO::setProduct, from(productRepository()))
+            .setter(OrderDTO::setQuantity, ints().rangeClosed(0, 5))
+            .setter(OrderDTO::setOrderDate, from(dates))
+            .list(ArrayList::new, NUM_ORDERS)
             .val();
   }
 
   private static List<String> firstNamesRepository() {
 
-    return mockNeat.names().first()
-            .stream()
-            .get()
-            .limit(100)
-            .map(first -> rnd.nextInt(50) > 10 ? first.toUpperCase() : first)
-            .collect(Collectors.toList());
+    return probabilities(String.class)
+            .add(0.1, names().first().format(LOWER_CASE))
+            .add(0.9, names().first().format(UPPER_CASE))
+            .list(NUM_FNAMES)
+            .get();
   }
 
   private static List<String> lastNamesRepository() {
+    return probabilities(String.class)
+            .add(0.1, names().last().format(LOWER_CASE))
+            .add(0.9, names().last().format(UPPER_CASE))
+            .list(NUM_LNAMES)
+            .get();
 
-    return mockNeat.names().last()
-            .stream()
-            .get()
-            .limit(100)
-            .map(last -> rnd.nextInt(50) < 40 ? last.toUpperCase() : last)
-            .collect(Collectors.toList());
   }
 
   private static List<String> emailsRepository() {
 
-    return mockNeat.emails()
+    return emails()
+            .list(NUM_EMAILS)
+            .get();
+  }
+
+  private static List<Product> productCategoryRepository(Category category, List<String> categoryProductNames) {
+
+    return filler(Product::new)
+            .setter(Product::setName,
+                    Seq.fromIterable(categoryProductNames)
+                            .cycle(true)
+                            .map(p -> {
+                              if (bools().probability(0.1).get()) {
+                                p = p.toLowerCase();
+                              }
+                              return p;
+                            })
+            )
+            .constant(Product::setCategory, category)
+            .setter(Product::setPrice, longs().range(100, 500).map(BigDecimal::valueOf))
+            .list(NUM_PRODUCTS)
+            .get();
+  }
+
+  private static List<Product> productRepository() {
+    return productNamesByCategory
+            .entrySet()
             .stream()
-            .get()
-            .limit(500)
-            .map(string -> rnd.nextInt(100) > 30 ? string : string.substring(0, string.indexOf('@') + 1))
+            .flatMap(e -> productCategoryRepository(e.getKey(), e.getValue()).stream())
             .collect(Collectors.toList());
   }
-
-  private static String getUniqueEmail() {
-    int index = rnd.nextInt(emails.size());
-    String email = emails.get(index);
-    emails.remove(index);
-    return email;
-  }
-
-  private static List<Product> productsRepository() {
-    return Arrays.asList(
-            new Product(rnd.nextInt(3) % 2 == 0 ? "COMPUTER" : "computer", Category.ELECTRONICS, new BigDecimal("5000")),
-            new Product(rnd.nextInt(20) > 13 ? "HEADPHONES" : "headphones", Category.ELECTRONICS, new BigDecimal("300")),
-            new Product("TV", Category.ELECTRONICS, new BigDecimal("10000")),
-            new Product(rnd.nextInt(4) < 2 ? "VR" : "vr", Category.ELECTRONICS, new BigDecimal("1000"))
-    );
-  }
 }
+

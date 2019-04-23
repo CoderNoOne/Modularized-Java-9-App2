@@ -10,7 +10,7 @@ import java.util.Properties;
 public class EmailService {
 
   private static final String emailAddress = "the.mountain.057@gmail.com";
-  private static final String emailPassword = "*****";
+  private static final String emailPassword = "****";
 
   private EmailService() {
   }
