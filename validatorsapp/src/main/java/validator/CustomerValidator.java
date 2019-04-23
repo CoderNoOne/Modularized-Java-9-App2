@@ -13,12 +13,12 @@ public class CustomerValidator implements Validator<Customer> {
     errors.clear();
 
     if (customer == null) {
-      errors.put("customer", "customer object is null");
+      errors.put("customer", "Customer object is null");
       return errors;
     }
 
     if (!isAgeValid(customer)) {
-      errors.put("Customer age", "customer is not adult");
+      errors.put("Customer age", "Customer is not an adult");
     }
 
     if (!isNameValid(customer)) {
@@ -27,7 +27,7 @@ public class CustomerValidator implements Validator<Customer> {
 
 
     if (!isSurnameValid(customer)) {
-      errors.put("Customer surname", "Customer surnname should contain only capital letters and whitespaces");
+      errors.put("Customer surname", "Customer surname should contain only capital letters and whitespaces");
     }
 
     if (!isEmailValid(customer)) {

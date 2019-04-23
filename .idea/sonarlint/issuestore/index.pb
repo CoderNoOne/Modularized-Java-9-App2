@@ -67,3 +67,7 @@ E
 modelapp/example.json,8\9\8903da52d4b5685436c9774863c3cfd1a484c967
 T
 $mainapp/src/main/java/main/Menu.java,e\a\eaac1166dc8be1243cf38a08ae1e1a64bc3868b9
+C
+mainapp/mainapp.iml,2\f\2f7811c1b6f664c7eb4ce6352c4ff3dfbb3b4848
+I
+serviceapp/serviceapp.iml,7\1\7182070ee80fd3cd78e516b8f782273574cb45b6

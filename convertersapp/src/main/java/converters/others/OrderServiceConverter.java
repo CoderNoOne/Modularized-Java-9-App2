@@ -18,9 +18,6 @@ public class OrderServiceConverter {
 
   public List<Order> toOrderList(String jsonFile) {
 
-   /* if (jsonFile == null || !jsonFile.matches("[\\w]+\\.json"))
-      throw new AppException("THE FILE SHOULD HAVE FORMAT OF .json");*/
-
     var orderValidator = new OrderValidator();
     AtomicInteger atomicInteger = new AtomicInteger(1);
 

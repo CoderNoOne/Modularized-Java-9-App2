@@ -7,7 +7,7 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
-public class OrderValidator implements Validator <Order>{
+public class OrderValidator implements Validator<Order> {
 
   private Map<String, String> errors = new HashMap<>();
   private ProductValidator productValidator = new ProductValidator();
@@ -17,19 +17,19 @@ public class OrderValidator implements Validator <Order>{
     errors.clear();
 
     if (order == null) {
-      errors.put("order", "order object is null");
+      errors.put("Order", "Order object is null");
       return errors;
     }
 
     if (order.getProduct() == null) {
-      errors.put("Product", "product object is null");
+      errors.put("Product", "Product object is null");
     } else {
       Map<String, String> productErrors = productValidator.validate(order.getProduct());
       errors.putAll(productErrors);
     }
 
     if (order.getCustomer() == null) {
-      errors.put("customer", "customer object is null");
+      errors.put("Customer", "Customer object is null");
     } else {
 
       Map<String, String> customerErrors = customerValidator.validate(order.getCustomer());
@@ -38,11 +38,11 @@ public class OrderValidator implements Validator <Order>{
 
 
     if (!isQuantityValid(order)) {
-      errors.put("product quantity", "product quantity must be number greater than 0");
+      errors.put("Product quantity", "Product quantity must be number greater than 0");
     }
 
     if (!isOrderDateValid(order)) {
-      errors.put("orderDate", "OrderDate cannot be done in the past");
+      errors.put("OrderDate", "Date order should take place in the future");
     }
 
     return errors;

@@ -28,7 +28,6 @@ public class UserDataService {
       sc = null;
     }
   }
-
   public LocalDate getDate(String message) {
     System.out.println(message);
 

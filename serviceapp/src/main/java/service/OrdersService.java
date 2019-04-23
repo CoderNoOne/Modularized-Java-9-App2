@@ -87,7 +87,7 @@ public class OrdersService {
 
     customerProductMap.
             forEach((customer, productList) ->
-                    EmailService.sendAsHtml("firelight.code@gmail.com", "Order info from app", clientInfo(customer)
+                    EmailService.sendAsHtml(customer.getEmail(), "Order info from app", clientInfo(customer)
                             + productList.stream().map(OrdersService::productInfo).collect(Collectors.joining())));
 
     return customerProductMap;

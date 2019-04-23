@@ -14,15 +14,15 @@ public class ProductValidator implements Validator<Product> {
     errors.clear();
 
     if (product == null) {
-      errors.put("product", "product object is null");
+      errors.put("Product", "Product object is null");
       return errors;
     }
     if (!isProductPriceValid(product)) {
-      errors.put("product price", "product price should be greater than zero");
+      errors.put("Product price", "Product price should be greater than zero");
     }
 
     if (!isProductNameValid(product)) {
-      errors.put("product name", "product name should contain only capital letters and whitespaces");
+      errors.put("Product name", "Product name should contain only capital letters and whitespaces");
     }
 
     return errors;
