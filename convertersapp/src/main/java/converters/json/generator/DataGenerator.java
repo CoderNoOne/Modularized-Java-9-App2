@@ -45,12 +45,13 @@ public class DataGenerator {
   private static final List<String> firstNames = firstNamesRepository();
   private static final List<String> lastNames = lastNamesRepository();
   private static final List<String> dates = datesRepository();
+  private static final String filename = "ProductsNameByCategory";
 
   static {
 
     try {
       productNamesByCategory.putAll(
-              Files.readAllLines(Paths.get(".\\convertersapp\\ProductsNameByCategory"))
+              Files.readAllLines(Paths.get(".\\convertersapp\\" + filename))
                       .stream()
                       .map(line -> line.split("[=]"))
                       .filter(arr -> Arrays.stream(Category.values()).map(Category::toString).anyMatch(arr[0]::equals))
@@ -58,7 +59,7 @@ public class DataGenerator {
                               Collectors.flatMapping(arr -> Arrays.stream(arr[1].split("[,]")),
                                       Collectors.toList()))));
     } catch (IOException e) {
-      throw new AppException("");
+      throw new AppException("Problem with " +filename);
     }
 
   }
