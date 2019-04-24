@@ -71,3 +71,5 @@ C
 mainapp/mainapp.iml,2\f\2f7811c1b6f664c7eb4ce6352c4ff3dfbb3b4848
 I
 serviceapp/serviceapp.iml,7\1\7182070ee80fd3cd78e516b8f782273574cb45b6
+T
+$convertersapp/ProductsNameByCategory,8\b\8b1d1fff8860f5df723e025319c4ec7bc8ee4a7f

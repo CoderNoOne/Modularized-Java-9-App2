@@ -45,7 +45,7 @@ public class DataGenerator {
   private static final List<String> firstNames = firstNamesRepository();
   private static final List<String> lastNames = lastNamesRepository();
   private static final List<String> dates = datesRepository();
-  private static final String filename = "ProductsNameByCategory";
+  private static final String filename = "ProductsNameByCate5gory";
 
   static {
 
@@ -59,6 +59,8 @@ public class DataGenerator {
                               Collectors.flatMapping(arr -> Arrays.stream(arr[1].split("[,]")),
                                       Collectors.toList()))));
     } catch (IOException e) {
+      System.out.println(e.getMessage());
+      System.err.println(Arrays.toString(e.getStackTrace()));
       throw new AppException("Problem with " + filename);
     }
   }
